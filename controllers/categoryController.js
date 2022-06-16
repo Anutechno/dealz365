@@ -4,18 +4,19 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 exports.creatCategory = catchAsyncErrors(async (req, res) => {
     try {
         const { name, cimg } = req.body;
+        console.log(req.body);
         if (name === "" || cimg === "") {
-            res.status(400).json({ mesaage: "category or image is blank" });
+            res.status(400).json({ message: "category or image is blank" });
         }
         const catname = await Category.findOne({ name: name });
         if (catname) {
-            res.status(400).json({ mesaage: "Category Already exist" });
+            res.status(400).json({ data: catname,message: "Category Already exist" });
         }
         const catAdd = await Category(req.body);
         await catAdd.save();
-        res.status(200).json({ data: catAdd, mesaage: "category add Succesfull" });
+        res.status(200).json({ data: catAdd, message: "category add Succesfull" });
     } catch (error) {
-        res.status(400).json({ data: error, mesaage: "Error" });
+        res.status(400).json({ data: error, message: "Error" });
     }
 })
 

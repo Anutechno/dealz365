@@ -24,48 +24,47 @@ exports.registerUser = catchAsyncErrors(async (req, res) => {
 
 //User login in database
 exports.loginUser = catchAsyncErrors(async (req, res) => {
-    try {
+    // try {
 
-        console.log(req.body);
+    console.log(req.body);
 
-        const { email, password, role } = req.body;
+    const { email, password } = req.body;
 
-        if (!email || !password) {
-            res
-                .status(400)
-                .json({ data: email, mesaage: "please enter and password" });
-        }
-
-        const userEmailPass = await Users.findOne({ email: email }).select(
-            "+password"
-        );
-
-        if (!userEmailPass) {
-            res
-                .status(401)
-                .json({ data: email, mesaage: "Envalid email and password" });
-        }
-
-        const isMatchPass = await userEmailPass.comparePassword(password);
-        if (!isMatchPass) {
-            res.status(401).json({
-                data: isMatchPass,
-                mesaage: "please enter current email and password",
-            });
-        } else {
-            const token = jwt.sign({ id: userEmailPass._id, email: userEmailPass.email, role: userEmailPass.role }, process.env.JWT_SECRET, {
-                expiresIn: 20,
-            })
-            console.log("ismatched: ", isMatchPass);
-            res
-                .status(200).cookie("token", token)
-                .json({ data: userEmailPass, mesaage: "user signin Successfull" });
-        }
-
-    } catch (err) {
-        res.status(400).json({ error: err })
+    if (!email || !password) {
+        res
+            .status(400)
+            .json({ data: email, mesaage: "please enter and password" });
     }
 
+    const userEmailPass = await Users.findOne({ email: email }).select(
+        "+password"
+    );
+
+    if (!userEmailPass) {
+        res
+            .status(401)
+            .json({ data: email, mesaage: "Envalid email and password" });
+    }
+
+    const isMatchPass = await userEmailPass.comparePassword(password);
+    if (!isMatchPass) {
+        res.status(401).json({
+            data: isMatchPass,
+            mesaage: "please enter current email and password",
+        });
+    } else {
+        const token = jwt.sign({ id: userEmailPass._id, email: userEmailPass.email, password: userEmailPass.password }, process.env.JWT_SECRET, {
+            expiresIn: 20,
+        })
+        console.log("ismatched: ", isMatchPass);
+        res
+            .status(200).cookie("token", token)
+            .json({ data: userEmailPass, mesaage: "user signin Successfull" });
+    }
+
+    // } catch (err) {
+    //     res.status(400).json({ error: err })
+    // }
 
 });
 

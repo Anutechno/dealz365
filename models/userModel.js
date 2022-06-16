@@ -14,7 +14,7 @@ const UserSchema = new mongoose.Schema({
         required: [true, 'Please Provide a last Name'],
     },
     username: {
-        type: String,
+         type: String,
         required: [true, 'Please Provide a username'],
     },
     email: {
@@ -42,7 +42,7 @@ const UserSchema = new mongoose.Schema({
     },
     dob: {
         type: Date,
-        required: [true, 'Please Enter your Date Of Birth'],
+        // required: [true, 'Please Enter your Date Of Birth'],
     },
     createdAt: {
         type: Date,
